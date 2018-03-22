@@ -1,0 +1,8 @@
+const path = require('path');
+
+module.exports = {
+    'config': path.resolve('chat-server', 'db', 'config', 'database.json'),
+    'models-path': path.resolve('chat-server', 'db', 'models'),
+    'seeders-path': path.resolve('chat-server', 'db', 'seeders'),
+    'migrations-path': path.resolve('chat-server', 'db', 'migrations')
+};

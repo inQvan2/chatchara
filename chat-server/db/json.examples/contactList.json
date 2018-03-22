@@ -1,0 +1,18 @@
+[
+  {
+    "phone": "+5353182018",
+    "isClient": false
+  },
+  {
+    "phone": "+5353182019",
+    "isClient": true
+  },
+  {
+    "phone": "+5353182020",
+    "isClient": false
+  },
+  {
+    "phone": "+5353182021",
+    "isClient": true
+  }
+]

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+</head>
+<body>
+<h1>Hello World!</h1>
+<div id="connected"></div>
+<div id="future"></div>
+<form id="chat_form">
+    <input id="phoneNumber" type="text" placeholder="phoneNumber"><br>
+    <input id="nickName" type="text" placeholder="nickName"><br>
+    <input id="email" type="email" placeholder="email"><br>
+    <textarea id="status" rows="3"></textarea><br>
+    <input type="submit" value="Send"><br>
+</form>
+<script src="/jquery/dist/jquery.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    let socket = io.connect('http://localhost:4444');
+
+    socket.on('connect', function () {
+        $('#connected').html('<h4>Se ha conectado</h4>')
+    });
+
+    $("#chat_form").submit(function (evt) {
+        evt.preventDefault();
+        let $phone = $('#phoneNumber').val();
+        let $nick = $('#nickName').val();
+        let $email = $('#email').val();
+        let $status = $('#status').val();
+
+        let datos = {
+            client: {phoneNumber: $phone, nickName: $nick, email: $email, status: $status},
+            device: {
+                imei: '123456789123456', brand: 'Samsung Galaxy S8', model: 'SM-G950F',
+                osName: 'Android Marshmallow', osVersion: '7.1', connection: '9400 MHz'
+            },
+            is: {
+                person: {contactList: [{phone: '+5353182018', isClient: true}]},
+            }
+        };
+        socket.emit('register-request', datos);
+    });
+
+    socket.on('register-response', function (response) {
+        console.log(response);
+        $('#future').html(JSON.stringify(response));
+    });
+</script>
+</body>
+</html>

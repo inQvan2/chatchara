@@ -1,0 +1,32 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "0152330924",
+    "database": "chatchara_db",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "define": {
+      "freezeTableName": true
+    }
+  },
+  "test": {
+    "username": "postgres",
+    "password": "0152330924",
+    "database": "chatchara_db",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "define": {
+      "freezeTableName": true
+    }
+  },
+  "production": {
+    "username": "postgres",
+    "password": "0152330924",
+    "database": "chatchara_db",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "define": {
+      "freezeTableName": true
+    }
+  }
+}

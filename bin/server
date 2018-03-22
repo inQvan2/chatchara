@@ -1,0 +1,96 @@
+const express = require('express');
+const http = require('http');
+const socketio = require('socket.io');
+const bodyParser = require('body-parser');
+
+const Socket = require('../chat-server/sockets/chatSockets');
+const config = require('./config');
+
+class Server {
+    constructor() {
+        this.port = Server.normalizePort(process.env.PORT || 4000);
+        this.host = 'localhost';
+
+        this.app = express();
+        this.server = http.Server(this.app);
+        this.socket = socketio(this.server);
+    }
+
+    appConfig() {
+        this.app.use(bodyParser.json());
+        new config(this.app);
+    }
+
+    includeRoutes() {
+        new Socket(this.socket).socketConfig();
+    }
+
+    appExecute() {
+        this.appConfig();
+        this.includeRoutes();
+
+        /**
+         * Listen on provided host and port.
+         */
+        this.server.listen(this.port, this.host, function () {
+            console.log('Listen on server://' + this.host + ":" + this.port);
+        });
+        this.server.on('listening', this.onListening());
+        this.server.on('error', this.onError());
+    }
+
+    /**
+     * Normalize a port into a number, string, or false.
+     */
+    static normalizePort(val) {
+        let port = parseInt(val, 10);
+        if (isNaN(port)) {
+            // named pipe
+            return val;
+        }
+        if (port >= 0) {
+            // port number
+            return port;
+        }
+        return false;
+    }
+
+    /**
+     * Event listener for HTTP server "error" event.
+     */
+    onError(error) {
+        if (error.syscall !== 'listen') {
+            throw error;
+        }
+        let bind = typeof this.port === 'string'
+            ? 'Pipe ' + this.port
+            : 'Port ' + this.port;
+        // handle specific listen errors with friendly messages
+        switch (error.code) {
+            case 'EACCES':
+                console.error(bind + ' requires elevated privileges');
+                process.exit(1);
+                break;
+            case 'EADDRINUSE':
+                console.error(bind + ' is already in use');
+                process.exit(1);
+                break;
+            default:
+                throw error;
+        }
+    }
+
+    /**
+     * Event listener for HTTP server "listening" event.
+     */
+    onListening() {
+        let addr = this.server.address();
+        let bind = typeof addr === 'string'
+            ? 'pipe ' + addr
+            : 'port ' + addr.port;
+        debug('Listening on ' + bind);
+    }
+}
+
+const app = new Server();
+app.appExecute();
